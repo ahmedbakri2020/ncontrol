@@ -1,0 +1,7 @@
+.md-no-margin-form-group{
+		.form-group{
+			@media(min-width: 992px){
+				margin: 0;
+			}
+		}
+	}

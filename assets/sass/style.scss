@@ -1,0 +1,25 @@
+/*!Theme Name: News Admin Panel
+Theme URI: http://itechnepal.com
+Author: Bikrant Giri
+Author URI: http://bikrantgiri.com.np/
+Description: The News Admin Panel theme takes us back to the News Portal, featuring a full range of post formats, each displayed beautifully in their own unique way. Design details abound and matching header images, beautiful typography and icons, and a flexible layout that looks great on any device, big or small.
+Version: 1.0
+*/
+
+/*===Reset=====*/
+@import 'reset';
+
+/*===Bootstrap=====*/
+@import 'bootstrap';
+
+/*===Fontawesome=====*/
+@import 'font-awesome';
+
+/*===Date Time Picker=====*/
+@import 'bootstrap-datetimepicker';
+
+/*=====Custom======*/
+@import 'custom';
+
+/*=====Responsive=====*/
+@import 'responsive';

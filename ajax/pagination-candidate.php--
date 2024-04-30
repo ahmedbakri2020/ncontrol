@@ -1,0 +1,104 @@
+<?php
+include '../../system/application_top.php';
+
+$page = (int) $_POST['page'];
+$perPage = (int) $_POST['perPage'];
+if ($page == 1) {
+    $start = 0;
+} else {
+    $start = ($page - 1) * $perPage;
+}
+
+//print_r($_POST);
+
+if (isset($_POST['filter'])) {
+    $cond = '';
+    if ($_POST['type'] != "") {
+        $cond .= 'type=' . (int) $_POST['type'] . ' and';
+    }if ($_POST['district'] != "") {
+        $cond .= ' district=' . (int) $_POST['district'] . ' and';
+    }if ($_POST['aid'] != "") {
+        $cond .= ' aid=' . (int) $_POST['aid'] . ' and';
+    } if ($_POST['pid'] != "") {
+        $cond .= ' pid=' . (int) $_POST['pid'] . ' and';
+    }if ($_POST['pradesh_id'] != "") {
+        $cond .= ' pradesh_id=' . (int) $_POST['pradesh_id'] . '';
+    }
+
+    $last_word = substr($cond, strrpos($cond, ' ') + 1);
+    if ($last_word == 'and') {
+        $condition = preg_replace('/\W\w+\s*(\W*)$/', '$1', $cond);
+    } else {
+        $condition = $cond;
+    }
+
+//echo "select * from tbl_candidate where $condition limit " . $start . ", " . $perPage . " ";  die();
+
+    $query = $obj->db->query("select * from tbl_candidate where $condition limit " . $start . ", " . $perPage . " ");
+    $count = $obj->countRow($obj->db->query("select * from tbl_candidate where $condition"));
+     $displayRecords = $obj->countRow($query);
+} elseif (isset($_POST['search'])) {
+    $searchid = $obj->StringInputCleaner($_POST['search']);
+    $query = $obj->db->query("select * from tbl_candidate where name like '$searchid%' limit " . $start . ", " . $perPage . "");
+    $count = $obj->countRow($obj->db->query("select * from tbl_candidate where name like '%$searchid%' "));
+     $displayRecords = $obj->countRow($query);
+} else {
+    $query = $obj->select('tbl_candidate', "*", NULL, array('vote_count'=>'desc'), array($start, $perPage));
+    $count = $obj->countRow($obj->select("tbl_candidate", "uin"));
+     $displayRecords = $obj->countRow($query);
+}
+
+
+$sn = 1;
+$numPage = ceil($count / $perPage);
+$newslist = '';
+if ($query->rowCount() > 0) {
+   
+    while ($row = $query->fetch()):
+        $party = $obj->getDataByField('tbl_party', 'uin', $row['pid']);
+        $district = $obj->getDataByField('cat01category', 'cat01id', $row['district']);
+         $pradesh = $obj->getDataByField('pradesh', 'uin', $row['pradesh_id']);
+          $local_level = $obj->getDataByField('area_subdivision', 'aid', $row['aid']);
+     $newslist .= '<tr>
+                        <th>' . $sn . '</th>        
+                        <td><img src="' . UPLOADS . 'election/thumbs/' . $party['image'] . '" /></td>
+                        <td>' . $row['name'] . ' '.(($row['cimage']!="")?'<img class="candi-image" src="' . UPLOADS . 'candidate/thumbs/' . $row['cimage'] . '" />':'').'</td>
+                        <td>' . $pradesh['cat01category'] . '</td>
+                        <td>' . $district['cat01category'] . '</td>
+                        <td>' . (($local_level['address'] !="")?" ".$local_level['address'] . "":'-'). '</td>
+                        <td>
+                          <input type="text" name="vote" value="' . $row['vote_count'] . '" id="' . $row['uin'] . '" />
+                          <input type="button" id="update_vote" onclick="updateVote(' . $row['uin'] . ',)" value="Update">
+                           <span id="spinner' . $row['uin'] . '"></span>
+                         </td>
+                           <td>
+                       ' . (($row['winner'] == 1) ? '<a href="#"><img src="assets/images/publish_small.png" align="published" onclick="change_status(' . $row['uin'] . ',0,\'winner\',\'tbl_candidate\',\'normal\' )" /></a>' : '<a href="#"><img src="assets/images/unpublish_small.png" align="published" onclick="change_status(' . $row['uin'] . ',1,\'winner\',\'tbl_candidate\',\'normal\' )" /></a> ') . '
+                        </td>
+                          <td>
+                          <a href="index.php?fol=form&page=add-candidate&id=' . $row['uin'] . '"class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                          <a href="index.php?fol=actpages&page=act_candidate&delete=' . $row['uin'] . '" onclick="return confirm(\'Delete / Uninstall cannot be undone! Are you sure you want to do this?\')"  class="btn btn-danger"><i class="fa fa-trash" ></i></a>
+                        </td>
+                         
+                        
+                        
+                    </tr>';
+
+        $sn++;
+         
+    endwhile;
+  
+
+}else {
+    $newslist .= 'No Result Found';
+}
+
+$json_arr = array("result" => $newslist, "numPage" => $numPage, "total_count" => $count, "showing_count" => $displayRecords);
+
+
+$result = json_encode($json_arr, JSON_UNESCAPED_UNICODE);
+
+if ($result != "") {
+    echo $result;
+} else {
+    echo 'error';
+}

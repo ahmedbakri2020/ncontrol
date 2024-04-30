@@ -1,0 +1,32 @@
+[30-Nov-2020 13:08:02 Asia/Katmandu] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 in /home/nayapatrikadaily/public_html/classes/user_previlage.php:31
+Stack trace:
+#0 /home/nayapatrikadaily/public_html/classes/user_previlage.php(31): PDO->query('select * from u...')
+#1 /home/nayapatrikadaily/public_html/ncontrol/ajax/pagination-news.php(56): User_Privilage->checkPrevilage(NULL)
+#2 {main}
+  thrown in /home/nayapatrikadaily/public_html/classes/user_previlage.php on line 31
+[30-Nov-2020 13:33:44 Asia/Katmandu] PHP Notice:  Undefined index: authid in /home/nayapatrikadaily/public_html/ncontrol/ajax/pagination-news.php on line 56
+[30-Nov-2020 13:33:44 Asia/Katmandu] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 in /home/nayapatrikadaily/public_html/classes/user_previlage.php:31
+Stack trace:
+#0 /home/nayapatrikadaily/public_html/classes/user_previlage.php(31): PDO->query('select * from u...')
+#1 /home/nayapatrikadaily/public_html/ncontrol/ajax/pagination-news.php(56): User_Privilage->checkPrevilage(NULL)
+#2 {main}
+  thrown in /home/nayapatrikadaily/public_html/classes/user_previlage.php on line 31
+[30-Nov-2020 13:48:39 Asia/Katmandu] PHP Notice:  Undefined index: authid in /home/nayapatrikadaily/public_html/ncontrol/ajax/pagination-news.php on line 56
+[30-Nov-2020 13:48:39 Asia/Katmandu] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 in /home/nayapatrikadaily/public_html/classes/user_previlage.php:31
+Stack trace:
+#0 /home/nayapatrikadaily/public_html/classes/user_previlage.php(31): PDO->query('select * from u...')
+#1 /home/nayapatrikadaily/public_html/ncontrol/ajax/pagination-news.php(56): User_Privilage->checkPrevilage(NULL)
+#2 {main}
+  thrown in /home/nayapatrikadaily/public_html/classes/user_previlage.php on line 31
+[30-Nov-2020 13:49:12 Asia/Katmandu] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 in /home/nayapatrikadaily/public_html/classes/user_previlage.php:31
+Stack trace:
+#0 /home/nayapatrikadaily/public_html/classes/user_previlage.php(31): PDO->query('select * from u...')
+#1 /home/nayapatrikadaily/public_html/ncontrol/ajax/pagination-news.php(56): User_Privilage->checkPrevilage(NULL)
+#2 {main}
+  thrown in /home/nayapatrikadaily/public_html/classes/user_previlage.php on line 31
+[30-Nov-2020 13:56:37 Asia/Katmandu] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 in /home/nayapatrikadaily/public_html/classes/user_previlage.php:31
+Stack trace:
+#0 /home/nayapatrikadaily/public_html/classes/user_previlage.php(31): PDO->query('select * from u...')
+#1 /home/nayapatrikadaily/public_html/ncontrol/ajax/pagination-news.php(56): User_Privilage->checkPrevilage(NULL)
+#2 {main}
+  thrown in /home/nayapatrikadaily/public_html/classes/user_previlage.php on line 31

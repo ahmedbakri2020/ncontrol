@@ -1,0 +1,224 @@
+<?php
+if (isset($_GET['id'])) {
+    $action = "edit";
+    $id = (int) $_GET['id'];
+    $row = $obj->getDataByField("tbl_candidate", 'uin', $id);
+} else {
+    $action = "add";
+}
+$sthaniya_pos_gaun = array("मेयर","उपमेयर","वडा अध्यक्ष");
+$sthaniya_pos_nagar = array("मेयर","उपमेयर");
+?>
+
+<link href="assets/css/password.css" rel="stylesheet">
+<form method="post" action="?fol=actpages&amp;page=act_candidate" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-sm-8 col-md-8  col-lg-9">
+            <article class="module">
+                <header><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                    <h2>Update Data</h2>
+                </header>
+                <section>
+                    <div class="form-group">
+                        <label for="userFirstName">  उमेदवार </label>
+                        <input type="text" name="name" class="form-control" id="userFirstName" value="<?php if (isset($row)) echo stripslashes($row['name']); ?>">
+                    </div>
+                    
+                      <div class="form-group">
+                            <div class="form-group">
+                                <select name="pradesh_id" class="form-control" id="pradesh" required>
+                                    <option value="0">--- प्रदेश छान्नुहोस ---</option>
+                                    <?php $res_pra = $obj->select('pradesh','*');
+                                    while($row_pra = $res_pra->fetch()):
+                                    ?>
+                                    <option value="<?php echo $row_pra['uin'];?>" <?php if ($row['pradesh_id'] == $row_pra['uin']) echo 'selected'; ?>><?php echo $row_pra['cat01category'];?></option>
+                                    <?php endwhile;?>
+                                   
+                                </select>
+                            </div>
+                        </div>
+
+                    <div class="form-group country">
+                        
+                       <select name="district_id" class="form-control" id="district" required>
+                                <option value="">--जिल्ला--</option>
+                                <?php
+                                if(isset($row)):
+                                $res_dist = $obj->select("cat01category", "*", array("type" => "district","pradesh_id" =>$row['pradesh_id']));
+                                if ($res_dist->rowCount() > 0) {
+                                    while ($row_dist = $res_dist->fetch()) {
+                                        ?>
+                                        <option value="<?php echo $row_dist['cat01id']; ?>" <?php if ($row['district'] == $row_dist['cat01id']) echo 'selected'; ?>> <?php echo $row_dist['cat01category'] ?></option>
+                                        <?php
+                                    }
+                                }
+                                endif;
+                                ?>
+                            </select>
+                       
+                    </div>
+                      <div class="form-group country">
+                        
+                       <select name="local_id" class="form-control" id="locallevel" required>
+                                    <option value=""> --स्थानीय तह  ---</option>
+                                    <?php
+                                      if(isset($row)):
+                                    $res_area = $obj->select("area_subdivision", "*",array("cid"=>$row['district']));
+                                    if ($res_area->rowCount() > 0) {
+                                        while ($row_area = $res_area->fetch()) {
+                                            ?>
+                                            <option value="<?php echo $row_area['aid']; ?>" <?php if ($row['aid'] == $row_area['aid']) echo 'selected'; ?> name="local_id"> <?php echo $row_area['address'] ?></option>
+                                            <?php
+                                        }
+                                    }
+                                    endif;
+                                    ?>
+                                </select>
+
+                       
+                    </div>
+                    
+                    <div class="form-group">
+                        
+                       <select name="ward_id" class="form-control" id="ward">
+                                    <option value="">Ward</option>
+                                    <?php
+                                      if(isset($row)):
+                                    $res_area = $obj->select("ward", "*",array("local_id"=>$row['aid']));
+                                    if ($res_area->rowCount() > 0) {
+                                        while ($row_area = $res_area->fetch()) {
+                                            ?>
+                                            <option value="<?php echo $row_area['uin']; ?>" <?php if (isset($row) && $row['ward_id'] == $row_area['uin']) echo 'selected'; ?>> <?php echo $row_area['ward'] ?></option>
+                                            <?php
+                                        }
+                                    }
+                                    endif;
+                                    ?>
+                                </select>
+                    </div>
+                     
+
+
+                    <!--<div class="form-group">
+                        <select name="sthaniya_type" class="form-control sthaniya_type" id="sthaniya_type">
+                            <option value="">-- स्थानीय सभा प्रकार --</option>
+                            <option value="गाउँपालिका" <?php if (isset($row) && $row['sthaniya_type'] == 'गाउँपालिका') echo 'selected'; ?>> गाउँपालिका  </option>
+                            <option value="नगरपालिका" <?php if (isset($row) && $row['sthaniya_type'] == 'नगरपालिका') echo 'selected'; ?>>नगरपालिका </option>      
+                        </select>
+                    </div>-->
+                    
+                    <div class="form-group">
+                        <select name="position" class="form-control" id="position" required>
+                               <option value="">--Post--</option>
+                            <?php foreach($sthaniya_pos_nagar as $value): ?>
+                                   <option value="<?php echo $value; ?>" <?php if($value==$row['sthaniya_position']) echo 'selected'; ?>> <?php echo $value; ?> </option>'; 
+                              <?php endforeach; ?>
+                            </select>
+                       
+                    </div>
+                    
+                   
+                    <div class="form-group">
+                       
+                        <select name="party" class="form-control" required>
+                            <option value="">--पार्टी--</option>
+                            <?php
+                            $res_party = $obj->select("tbl_party", "*", array("type" => "area"));
+                            if ($res_party->rowCount() > 0) {
+                                while ($row_party = $res_party->fetch()) {
+                                    ?>
+                                    <option value="<?php echo $row_party['uin']; ?>" <?php if (isset($row) && $row['pid'] == $row_party['uin']) echo 'selected'; ?>> <?php echo $row_party['name'] ?></option>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                </section>
+            </article>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-3">
+            <article class="module">
+                <header>
+                    <h2>Candidate Image</h2><br>
+                    
+                </header>
+               
+                <section>
+                    <div class="bs-upload-image" <?php
+                    if ($action == 'add') {
+                        echo 'style="display: none;"';
+                    }
+                    ?> id="thumbnail" data-toggle="modal" data-target=".bs-modal-lg">
+                         <?php if (isset($row) && $row['cimage'] != ""): ?>
+                            <img src="../uploads/candidate/thumbs/<?php echo $row['cimage']; ?>">
+                        <?php endif; ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="userImage"></label>
+                        <input type="file" name="image" onchange="readURL(this);" class="form-control" id="image">
+                    </div>
+                </section>
+            </article>
+
+
+            <input type="hidden" name="id" value="<?php echo $id ?>" class="form-control">
+            <input type="hidden" name="action" value="<?php echo $action ?>" class="form-control">
+            <button type="submit" name="submit" class="btn margin-top btn-primary btn-lg btn-block">Save</button>
+
+        </div>
+    </div>
+</form>
+<script>
+         $("#pradesh").on("change",function(){
+      var provinceId = $(this).val();
+      $.ajax({
+        url :"ajax/election/district-list.php",
+        type:"POST",
+        cache:false,
+        data:{provinceId:provinceId},
+        success:function(data){
+          $("#district").html(data);
+        }
+      });
+    });
+     $("#district").on("change",function(){
+      var districtId = $(this).val();
+      $.ajax({
+        url :"ajax/election/district-list.php",
+        type:"POST",
+        cache:false,
+        data:{districtId:districtId},
+        success:function(data){
+          $("#locallevel").html(data);
+        }
+      });
+    });
+    $("#locallevel").on("change",function(){
+      var localId = $(this).val();
+      $.ajax({
+        url :"ajax/election/district-list.php",
+        type:"POST",
+        cache:false,
+        data:{localId:localId},
+        success:function(data){
+          $("#ward").html(data);
+        }
+      });
+    });
+</script>
+<script>
+                            function readURL(input) {
+
+                                $('#thumbnail').show();
+                                if (input.files && input.files[0]) {
+                                    var reader = new FileReader();
+
+                                    reader.onload = function (e) {
+                                        $('#thumbnail').html('<img src="' + e.target.result + '"  height="200"/>');
+                                    };
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            }
+</script>
